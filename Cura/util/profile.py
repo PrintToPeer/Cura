@@ -667,6 +667,27 @@ def loadProfile(filename, allMachines = False):
 			if profileParser.has_option(section, set.getName()):
 				set.setValue(unicode(profileParser.get(section, set.getName()), 'utf-8', 'replace'))
 
+def loadMachine(filename):
+  """
+    Read a machine file as machine settings.
+  :param filename:    The ini filename to load the profile from.
+  """
+  global settingsList
+  profileParser = ConfigParser.ConfigParser()
+  try:
+    profileParser.read(filename)
+  except ConfigParser.ParsingError:
+    return
+
+  for set in settingsList:
+    if not set.isMachineSetting():
+      continue
+
+    section = 'machine'
+
+    if profileParser.has_option(section, set.getName()):
+      set.setValue(unicode(profileParser.get(section, set.getName()), 'utf-8', 'replace'))
+
 def saveProfile(filename, allMachines = False):
 	"""
 		Save the current profile to an ini file.

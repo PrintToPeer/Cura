@@ -8,6 +8,9 @@ Versions up from 13.05 are based on a C++ engine called CuraEngine.
 """
 __copyright__ = "Copyright (C) 2013 David Braam - Released under terms of the AGPLv3 License"
 
+import os, sys
+sys.path.insert(1, os.path.dirname(__file__) + '/..')
+
 from optparse import OptionParser
 
 from Cura.util import profile
@@ -19,6 +22,8 @@ def main():
 	parser = OptionParser(usage="usage: %prog [options] <filename>.stl")
 	parser.add_option("-i", "--ini", action="store", type="string", dest="profileini",
 		help="Load settings from a profile ini file")
+	parser.add_option("-m", "--machine", action="store", type="string", dest="machineini",
+		help="Load settings from a machine ini file")
 	parser.add_option("-r", "--print", action="store", type="string", dest="printfile",
 		help="Open the printing interface, instead of the normal cura interface.")
 	parser.add_option("-p", "--profile", action="store", type="string", dest="profile",
@@ -47,6 +52,9 @@ def main():
 		profile.loadProfile(options.profileini)
 	else:
 		profile.loadProfile(profile.getDefaultProfilePath(), True)
+
+	if options.machineini is not None:
+		profile.loadMachine(options.machineini)
 
 	if options.printfile is not None:
 		from Cura.gui import printWindow

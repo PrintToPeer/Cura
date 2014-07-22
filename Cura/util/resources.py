@@ -9,7 +9,7 @@ import sys
 import glob
 
 #Cura/util classes should not depend on wx...
-import wx
+# import wx
 import gettext
 
 if sys.platform.startswith('darwin'):

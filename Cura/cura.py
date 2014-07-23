@@ -43,7 +43,6 @@ def main():
 		serialCommunication.startMonitor(port, baud)
 		return
 
-	print "load preferences from " + profile.getPreferencePath()
 	profile.loadPreferences(profile.getPreferencePath())
 
 	if options.profile is not None:
@@ -65,6 +64,8 @@ def main():
 		from Cura.util import meshLoader
 		import shutil
 
+		exit_code = 0
+
 		def commandlineProgressCallback(progress):
 			if progress >= 0:
 				#print 'Preparing: %d%%' % (progress * 100)
@@ -74,19 +75,30 @@ def main():
 		engine = sliceEngine.Engine(commandlineProgressCallback)
 		for m in meshLoader.loadMeshes(args[0]):
 			scene.add(m)
+		if len(scene.objects()) < 1:
+			print "Error: No valid meshes found"
+			exit_code = 1
+
 		engine.runEngine(scene)
 		engine.wait()
 
 		if not options.output:
 			options.output = args[0] + profile.getGCodeExtension()
-		with open(options.output, "wb") as f:
-			f.write(engine.getResult().getGCode())
-		print 'GCode file saved : %s' % options.output
+
+		if engine.getResult():
+			with open(options.output, "wb") as f:
+				f.write(engine.getResult().getGCode())
+			print 'GCode file saved: %s' % options.output
+
+		else:
+			print "Error: Slicing failed"
+			exit_code = 1
 
 		engine.cleanup()
+		return exit_code
 	else:
 		from Cura.gui import app
 		app.CuraApp(args).MainLoop()
 
 if __name__ == '__main__':
-	main()
+	sys.exit(main())

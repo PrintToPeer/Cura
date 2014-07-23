@@ -320,6 +320,7 @@ class Engine(object):
 						objMax[0] = max(oMax[0], objMax[0])
 						objMax[1] = max(oMax[1], objMax[1])
 			if objMin is None:
+				print "Error: Object does not fit on platform"
 				return
 			pos += (objMin + objMax) / 2.0 * 1000
 			commandList += ['-s', 'posx=%d' % int(pos[0]), '-s', 'posy=%d' % int(pos[1])]

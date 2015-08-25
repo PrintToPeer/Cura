@@ -9,7 +9,7 @@ Versions up from 13.05 are based on a C++ engine called CuraEngine.
 __copyright__ = "Copyright (C) 2013 David Braam - Released under terms of the AGPLv3 License"
 
 import os, sys
-sys.path.insert(1, os.path.dirname(__file__) + '/..')
+sys.path.insert(1, os.path.dirname(os.path.realpath(__file__)) + '/..')
 
 from optparse import OptionParser
 
